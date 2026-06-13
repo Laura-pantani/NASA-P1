@@ -26,9 +26,10 @@ Il progetto si sviluppa come una piattaforma documentativa dedicata alla storia 
 
 
 ## Tecnologia usata
-Il progetto è stato realizzato con **HTML**, **CSS** e **JavaScript**, lavorando in Visual Studio Code con il supporto di Gemini Code Assist. La pagina narrativa è costruita come racconto verticale: testi, immagini, animazioni leggere e navigazione a capitoli accompagnano l'utente nella storia di Hubble.
+Il progetto è stato sviluppato utilizzando tecnologie web standard, puntando su un'esperienza fluida e immersiva. Lo sviluppo è avvenuto in **Visual Studio Code** con l'ausilio di **Gemini Code Assist** per l'ottimizzazione del codice.
 
-Per la parte visiva ho usato CSS personalizzato, font locali e variabili cromatiche, in modo da mantenere un'identità coerente e scura, vicina all'immaginario dello spazio.
+### Frontend e Design
+Per il layout e l'identità visiva sono stati utilizzati **HTML5** e **CSS3**. L'interfaccia adotta un approccio "dark mode" per richiamare il vuoto cosmico, gestito attraverso variabili CSS e font tipografici personalizzati per garantire coerenza visiva in tutta la narrazione verticale.
 
 ```css
 @font-face {
