@@ -33,6 +33,11 @@
 
   body { position: relative; }
 
+  body.intro-active .frame,
+  body.intro-active .story-link {
+    opacity: 0;
+  }
+
   #scene-root,
   canvas {
     position: fixed;
@@ -50,6 +55,101 @@
     z-index: 5;
     pointer-events: none;
     padding: 26px 0 18px;
+    transition: opacity 1.8s ease;
+  }
+
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: grid;
+    place-items: center;
+    padding: 32px;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), transparent 32%), rgba(0, 0, 0, 0.18);
+    pointer-events: auto;
+    cursor: pointer;
+    transition: opacity 1.8s ease, visibility 1.8s ease;
+  }
+
+  .intro-overlay.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .page-transition {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.25s ease;
+  }
+
+  .page-transition.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .intro-title {
+    max-width: min(860px, 92vw);
+    margin: 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-family: "Komunal Mono", "Courier New", Courier, monospace;
+    font-size: clamp(1.8rem, 5.4vw, 5rem);
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    line-height: 1.05;
+    text-align: center;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+    filter: blur(8px);
+    transition: opacity 1.9s ease, transform 1.9s ease, filter 1.9s ease;
+  }
+
+  .intro-title span {
+    display: block;
+    margin-top: 0.45em;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: clamp(0.7rem, 1.4vw, 1.05rem);
+    letter-spacing: 0.28em;
+  }
+
+  .intro-hint {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(560px, 86vw);
+    margin: 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: clamp(1rem, 2.2vw, 1.7rem);
+    line-height: 1.45;
+    letter-spacing: 0.08em;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    filter: blur(6px);
+    transition: opacity 1.8s ease, transform 1.8s ease, filter 1.8s ease;
+  }
+
+  .intro-overlay.step-title .intro-title {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+
+  .intro-overlay.step-hint .intro-title {
+    opacity: 0;
+    transform: translateY(-16px) scale(1.02);
+    filter: blur(7px);
+  }
+
+  .intro-overlay.step-hint .intro-hint {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    filter: blur(0);
   }
 
   .header {
@@ -61,33 +161,54 @@
     text-align: center;
   }
 
-  .back-link {
-    position: absolute;
-    top: 38px;
-    left: 30px;
+  .story-link {
+    position: fixed;
+    left: 50%;
+    bottom: 108px;
     z-index: 10;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
+    width: 30px;
     height: 42px;
     color: var(--fg);
     text-decoration: none;
-    font-size: 28px;
-    line-height: 1;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.28);
-    pointer-events: stroke;
-    opacity: 0.4;
-    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+    border: 0;
+    background: transparent;
+    pointer-events: auto;
+    opacity: 0.42;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    transform: translateX(-50%);
   }
 
-  .back-link:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: translateX(-2px);
-    opacity: 1;
+  .story-link::before,
+  .story-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    display: block;
+    transform: translateX(-50%);
+  }
+
+  .story-link::before {
+    top: 4px;
+    width: 1px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .story-link::after {
+    bottom: 6px;
+    width: 9px;
+    height: 9px;
+    border-right: 1px solid rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .story-link:hover {
+    transform: translate(-50%, 4px);
+    opacity: 0.9;
   }
 
   .title {
@@ -100,7 +221,6 @@
     font-family: "Komunal Mono", "Courier New", Courier, monospace;
   }
 
-  .top-rule,
   .bottom-rule,
   .timeline-track {
     position: absolute;
@@ -108,19 +228,6 @@
     right: 0;
     height: 0.5px;
     background: var(--line);
-  }
-
-  .top-rule { top: 114px; }
-
-  #info-box {
-    position: absolute;
-    top: 124px;
-    left: 58px;
-    text-align: left;
-    color: var(--muted);
-    font-size: 0.95rem;
-    line-height: 1.28;
-    letter-spacing: 0.02em;
   }
 
   #loader {
@@ -146,27 +253,42 @@
     align-items: center;
     gap: 20px;
   }
+
+  .category-panel {
+    position: absolute;
+    top: 34px;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .category-panel .category-btn {
+    width: auto;
+  }
   .category-btn {
     pointer-events: auto;
-    min-width: 118px;
-    height: 38px;
-    padding: 0 18px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
     color: var(--fg);
     font-family: "Komunal Mono", monospace;
-    font-size: 0.9rem;
-    letter-spacing: 0.1em;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s ease;
-    opacity: 0.7;
+    transition: color 0.25s ease, opacity 0.25s ease;
+    opacity: 0.52;
   }
 
   .category-btn:hover, .category-btn.active {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.6);
+    background: transparent;
+    color: #fff;
     opacity: 1;
   }
   .bottom-rule { top: 0; }
@@ -249,7 +371,13 @@
     position: relative;
     box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
   }
-  #modal-img { max-width: 100%; max-height: 70vh; display: block; margin: 0 auto; }
+  #modal-img {
+    max-width: 100%;
+    max-height: 70vh;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid rgba(170, 170, 170, 0.58);
+  }
   #modal-text { padding: 24px; }
   
   /* Stile migliorato per la X di chiusura */
@@ -266,22 +394,32 @@
   @media (max-width: 900px) {
     .frame { padding-top: 22px; }
     .header { padding: 0 24px; }
-    .back-link {
-      top: 28px;
-      left: 24px;
-      width: 38px;
+    .story-link {
+      bottom: 98px;
+      width: 28px;
       height: 38px;
-      font-size: 24px;
     }
     .title {
       font-size: clamp(2rem, 9vw, 3rem);
       letter-spacing: 0.2em;
     }
-    .top-rule { top: 92px; }
-    #info-box {
-      top: 100px;
-      left: 24px;
-      font-size: 0.82rem;
+    .intro-title {
+      letter-spacing: 0.12em;
+    }
+    .intro-title span {
+      letter-spacing: 0.16em;
+    }
+    .category-panel {
+      top: 28px;
+      left: 50%;
+      width: calc(100% - 116px);
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .category-btn {
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
     }
     .timeline-shell {
       bottom: 14px;
@@ -297,29 +435,32 @@
   }
 </style>
 </head>
-<body>
+<body class="intro-active">
 <div id="scene-root"></div>
-<a class="back-link" href="../index.html#gallery" aria-label="Torna al capitolo archivio">&#8592;</a>
+<div class="intro-overlay" id="intro-overlay" aria-hidden="true">
+  <h1 class="intro-title">
+    35 Years of Photographs
+    <span>by the Hubble Space Telescope</span>
+  </h1>
+  <p class="intro-hint">Trascina per ruotare<br>Clicca una foto per ingrandire</p>
+</div>
+<a class="story-link" href="../storia.html" aria-label="Vai alla storia di Hubble"></a>
+<div class="page-transition" id="page-transition" aria-hidden="true"></div>
 <script src="database.js"></script>
 
 <script>
   // Qui potrai usare la variabile HUBBLE_DB liberamente
 </script>
 <div class="frame">
-  <div class="header">
-    <h1 class="title">35 Years Of Images</h1>
-  </div>
-  <div class="top-rule"></div>
-  <div id="info-box">
-    <p>trascina per ruotare<br>Clicca una foto per ingrandire</p>
-  </div>
-  <div class="timeline-shell">
+  <div class="category-panel">
     <button class="category-btn active" onclick="loadCategory(this, 'tutte')">Tutte</button>
     <button class="category-btn" onclick="loadCategory(this, 'nebulose')">Nebulose</button>
     <button class="category-btn" onclick="loadCategory(this, 'galassie')">Galassie</button>
     <button class="category-btn" onclick="loadCategory(this, 'pianeti')">Pianeti</button>
     <button class="category-btn" onclick="loadCategory(this, 'stelle')">Stelle</button>
     <button class="category-btn" onclick="loadCategory(this, 'ammassi')">Ammassi</button>
+  </div>
+  <div class="timeline-shell">
   </div>
 </div>
 
@@ -361,20 +502,58 @@ textureLoader.setCrossOrigin('anonymous');
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+const introOverlay = document.getElementById('intro-overlay');
+const pageTransition = document.getElementById('page-transition');
+const storyLink = document.querySelector('.story-link');
 let imagesObjs = [];
 let isModalOpen = false;
 let originalMarkerLeft = null;
 let hoveredImageYear = null;
 let currentCategoryLoad = 0;
+let introActive = true;
+let introStep = 0;
+
+function finishIntro() {
+  introActive = false;
+  document.body.classList.remove('intro-active');
+  if (introOverlay) introOverlay.classList.add('is-hidden');
+}
+
+if (introOverlay) {
+  window.requestAnimationFrame(() => {
+    introOverlay.classList.add('step-title');
+  });
+
+  introOverlay.addEventListener('click', () => {
+    if (introStep === 0) {
+      introStep = 1;
+      introOverlay.classList.remove('step-title');
+      introOverlay.classList.add('step-hint');
+      return;
+    }
+
+    finishIntro();
+  });
+}
+
+if (storyLink && pageTransition) {
+  storyLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    pageTransition.classList.add('is-active');
+    window.setTimeout(() => {
+      window.location.href = storyLink.href;
+    }, 950);
+  });
+}
 
 // Stelle di sfondo
 const starGeo = new THREE.BufferGeometry();
 const starStaff = [];
-for(let i=0; i<8000; i++) {
+for(let i=0; i<2800; i++) {
   starStaff.push((Math.random()-0.5)*1000, (Math.random()-0.5)*1000, (Math.random()-0.5)*1000);
 }
 starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starStaff, 3));
-universe.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0xffffff, size: 0.7})));
+universe.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color: 0xffffff, size: 0.48, transparent: true, opacity: 0.72})));
 
 // --- FUNZIONE CAMBIO CATEGORIA ---
 function loadCategory(btn, tag) {
@@ -388,6 +567,10 @@ function loadCategory(btn, tag) {
   // Rimuovi vecchie immagini
   imagesObjs.forEach(obj => {
     universe.remove(obj);
+    obj.children.forEach(child => {
+      child.geometry.dispose();
+      child.material.dispose();
+    });
     obj.geometry.dispose();
     obj.material.map.dispose();
     obj.material.dispose();
@@ -405,10 +588,17 @@ function loadCategory(btn, tag) {
       }
 
       const aspect = texture.image.width / texture.image.height;
+      const geometry = new THREE.PlaneGeometry(12 * aspect, 12);
       const mesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(12 * aspect, 12),
-        new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide })
+        geometry,
+        new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true, opacity: 0 })
       );
+      const border = new THREE.LineSegments(
+        new THREE.EdgesGeometry(geometry),
+        new THREE.LineBasicMaterial({ color: 0xaaaaaa, transparent: true, opacity: 0 })
+      );
+      border.position.z = 0.01;
+      mesh.add(border);
 
       const radius = 60;
 
@@ -423,8 +613,16 @@ function loadCategory(btn, tag) {
       
       mesh.position.set(x, y, z);
       mesh.lookAt(0, 0, 0);
+      mesh.scale.setScalar(0.35);
       
-      mesh.userData = { title: `Anno ${item.year}: ${item.title}`, desc: item.desc, url: item.url, tags: item.tags };
+      mesh.userData = {
+        title: `Anno ${item.year}: ${item.title}`,
+        desc: item.desc,
+        url: item.url,
+        tags: item.tags,
+        revealDelay: (introActive ? 0.2 : 0) + i * 0.07,
+        revealProgress: 0
+      };
       universe.add(mesh);
       imagesObjs.push(mesh);
     }, undefined, (err) => console.error("Errore caricamento:", item.url));
@@ -465,6 +663,7 @@ window.addEventListener('mousedown', (e) => {
 window.addEventListener('mouseup', (e) => {
   if (e.target.closest('.category-btn')) return;
   isDragging = false;
+  if (introActive) return;
   if (Math.abs(e.clientX - prevM.x) < 5) {
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(imagesObjs);
@@ -551,10 +750,32 @@ function resetTimelineMarker() {
 
 function animate() {
   requestAnimationFrame(animate);
-  if(!isModalOpen) {
+
+  if (!introActive) {
+    imagesObjs.forEach((obj) => {
+      const delay = obj.userData.revealDelay || 0;
+      if (delay > 0) {
+        obj.userData.revealDelay = Math.max(0, delay - 0.016);
+        return;
+      }
+
+      obj.userData.revealProgress = Math.min(1, (obj.userData.revealProgress || 0) + 0.01);
+      const eased = 1 - Math.pow(1 - obj.userData.revealProgress, 3);
+      const scale = 0.35 + eased * 0.65;
+      obj.scale.setScalar(scale);
+      obj.material.opacity = eased;
+      obj.children.forEach(child => {
+        child.material.opacity = eased * 0.72;
+      });
+    });
+  }
+
+  if(!isModalOpen && !introActive) {
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(imagesObjs);
     document.body.style.cursor = hits.length > 0 ? 'pointer' : 'default';
+  } else if (introActive) {
+    document.body.style.cursor = 'default';
   }
   renderer.render(scene, camera);
 }

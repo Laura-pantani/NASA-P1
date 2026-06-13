@@ -20,13 +20,13 @@ Al momento non sono stati individuati riferimenti progettuali specifici.
 
 
 ## Design dell’interfaccia e modalità di interazione
-Il progetto si sviluppa come una piattaforma documentativa dedicata alla storia di Hubble. In una prima fase, l’utente può esplorare contenuti informativi sul satellite e sulla sua evoluzione nel tempo. Successivamente, viene presentata una sezione di archivio che raccoglie una selezione di immagini dello spazio catturate da Hubble, consultabili in modo semplice e intuitivo.
+Il progetto si sviluppa come una piattaforma documentativa dedicata alla storia di Hubble. L’esperienza si apre con un archivio interattivo di immagini dello spazio catturate da Hubble, consultabili in modo semplice e intuitivo. Dall’archivio l’utente può poi accedere al racconto dedicato al satellite, alla sua evoluzione e al suo ruolo nella storia dell’osservazione spaziale.
 
 
 
 
 ## Tecnologia usata
-Il progetto è stato realizzato con **HTML**, **CSS** e **JavaScript**, lavorando in Visual Studio Code con il supporto di Gemini Code Assist. La pagina principale è costruita come racconto verticale: testi, immagini, animazioni leggere e navigazione a capitoli accompagnano l'utente nella storia di Hubble.
+Il progetto è stato realizzato con **HTML**, **CSS** e **JavaScript**, lavorando in Visual Studio Code con il supporto di Gemini Code Assist. La pagina narrativa è costruita come racconto verticale: testi, immagini, animazioni leggere e navigazione a capitoli accompagnano l'utente nella storia di Hubble.
 
 Per la parte visiva ho usato CSS personalizzato, font locali e variabili cromatiche, in modo da mantenere un'identità coerente e scura, vicina all'immaginario dello spazio.
 

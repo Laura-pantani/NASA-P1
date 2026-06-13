@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hubble Space Telescope</title>
+  <style>
+    @font-face {
+      font-family: "Kantumruy Pro";
+      src: url("./fonts/KantumruyPro-VariableFont_wght.ttf") format("truetype");
+      font-weight: 100 900;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: "Komunal Mono";
+      src: url("./fonts/pnakomunalmonodemo-medium.ttf") format("truetype");
+      font-weight: 800;
+      font-style: normal;
+      
+    }
+
+    :root {
+      --bg: #020202;
+      --panel: rgba(255, 255, 255, 0.04);
+      --line: rgba(255, 255, 255, 0.12);
+      --text: #f2efe8;
+      --muted: rgba(242, 239, 232, 0.72);
+      --soft: rgba(242, 239, 232, 0.48);
+      --page-gutter: 12px;
+      --headline-bleed: 28px;
+      --column: min(1300px, calc(100vw - (var(--page-gutter) * 2)));
+      --poster: min(1300px, 100%);
+      --mono: "Komunal Mono", "Courier New", Courier, monospace;
+      --sans: "Kantumruy Pro", "Avenir Next Condensed", "Helvetica Neue Condensed", "Arial Narrow", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      margin-left: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: linear-gradient(180deg, #050505 0%, #020202 100%);
+      font-family: var(--sans);
+      overflow-x: hidden;
+    }
+
+    .page-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: #000;
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 1.4s ease, visibility 1.4s ease;
+    }
+
+    .page-transition.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -3;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px) 0 0 / 340px 340px,
+        radial-gradient(circle at 76% 24%, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px) 0 0 / 420px 420px;
+      opacity: 0.52;
+    }
+
+    .starfield {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -2;
+      opacity: 0.45;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    .chapter-index {
+      position: fixed;
+      top: 28px;
+      left: 50%;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      transform: translateX(-50%);
+    }
+
+    .chapter-dot {
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      line-height: 1;
+      text-decoration: none;
+      text-transform: uppercase;
+      background: transparent;
+      opacity: 0.52;
+      transition: color 0.25s ease, opacity 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .chapter-dot:hover {
+      opacity: 1;
+    }
+
+    .chapter-dot.is-active {
+      color: #fff;
+      opacity: 1;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .section {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 112px 0 64px;
+      margin-bottom: 120px;
+      scroll-margin-top: 96px;
+    }
+
+    .page {
+      width: var(--column);
+      margin: 0 auto;
+      padding: 5px 0 88px;
+    }
+
+    .poster {
+      width: var(--poster);
+      margin: 0 auto;
+    }
+
+    .micro-title,
+    .button {
+      font-family: var(--mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .headline {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      margin-left: calc(var(--headline-bleed) * -1);
+    }
+
+    .headline::before,
+    .headline::after {
+      content: "";
+      height: 1px;
+      background: var(--line);
+    }
+
+    .headline::before {
+      flex: 0 0 var(--headline-bleed);
+    }
+
+    .headline::after {
+      flex: 1;
+    }
+
+    .headline h1 {
+      margin: 0;
+      font-size: 3rem;
+      line-height: 1.4;
+      font-weight: 700;
+      color: var(--text);
+      font-family: var(--mono);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .headline h2 {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 1.4;
+      font-weight: 500;
+      color: var(--text);
+      font-family: var(--mono);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    .headline h3 {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 1.4;
+      font-weight: 500;
+      color: var(--text);
+      font-family: var(--mono);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    .hero {
+      padding-top: 86px;
+      min-height: clamp(320px, 44vw, 560px);
+    }
+
+    .hero .headline {
+      position: relative;
+      z-index: 2;
+      max-width: min(760px, 78%);
+    }
+
+    .hero-body {
+      position: relative;
+      display: block;
+      min-height: clamp(260px, 38vw, 500px);
+    }
+
+    .hero-art-wrap {
+      position: absolute;
+      inset: -54px -20px 0 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    
+  
+    
+    .hero-body,
+    .section-grid,
+    .launch-grid,
+    .gallery-layout,
+    .today-layout,
+    .future-layout,
+    .cta-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(250px, 0.92fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .hero-art,
+    .section-media,
+    .gallery-media,
+    .today-media,
+    .future-media,
+    .cta-media {
+      min-width: 0;
+    }
+
+    .hero-body {
+      display: block;
+      grid-template-columns: none;
+      gap: 0;
+    }
+
+    .hero-art {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      width: min(700px, 70vw);
+      max-width: none;
+      margin-left: 0;
+      transform: translateX(-50%);
+      opacity: 0.9;
+    }
+
+    .micro-title {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      line-height: 1.25;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    h3 {
+      color: var(--text);
+    }
+
+    .section-copy {
+      padding-top: 4px;
+    }
+
+    .section-copy.copy-with-fact {
+      display: grid;
+      grid-template-columns: minmax(0, 34ch) minmax(220px, 1fr);
+      gap: 22px 38px;
+      align-items: start;
+    }
+
+    .section-copy.copy-with-fact > :not(.fact-card) {
+      grid-column: 1;
+    }
+
+    .text-block + .text-block {
+      margin-top: 22px;
+    }
+
+    .text-block p,
+    .support-copy,
+    .cta p {
+      margin: 0;
+      font-size: 0.97rem;
+      line-height: 1.62;
+      color: var(--muted);
+      max-width: 34ch;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fact-card.reveal {
+      transform: translateX(42px);
+    }
+
+    .fact-card.reveal.is-visible {
+      transform: translateX(0);
+    }
+
+    .reveal-soft {
+      opacity: 0;
+      transform: scale(0.985);
+      transition: opacity 1.1s ease, transform 1.1s ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal-soft.is-visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .fact-card {
+      position: relative;
+      grid-column: 2;
+      align-self: start;
+      width: 100%;
+      margin-top: 6px;
+      padding: 34px 30px 28px 34px;
+      color: var(--text);
+      background:
+        linear-gradient(var(--line), var(--line)) 40px 0 / calc(100% - 40px) 1px no-repeat,
+        linear-gradient(var(--line), var(--line)) 0 58px / 1px calc(100% - 88px) no-repeat,
+        linear-gradient(var(--line), var(--line)) 0 100% / calc(100% - 44px) 1px no-repeat,
+        rgba(0, 0, 0, 0.22);
+      font-family: var(--sans);
+    }
+
+    .fact-card-star {
+      position: absolute;
+      top: -14px;
+      left: -10px;
+      width: 26px;
+      height: 26px;
+      opacity: 0.6;
+    }
+
+    .fact-card-star::before,
+    .fact-card-star::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      transform: translate(-50%, -50%);
+    }
+
+    .fact-card-star::before {
+      width: 1px;
+      height: 100%;
+    }
+
+    .fact-card-star::after {
+      width: 100%;
+      height: 1px;
+    }
+
+    .fact-card-star span::before,
+    .fact-card-star span::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.75);
+      transform-origin: center;
+    }
+
+    .fact-card-star span::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .fact-card-star span::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .fact-card p {
+      margin: 0;
+      max-width: 19ch;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      line-height: 1.52;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .history-visual {
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .history-visual img:first-child {
+      width: 40%;
+      margin: 0;
+    }
+
+    .history-visual img:last-child {
+      width: 92%;
+      margin-left: auto;
+      opacity: 0.9;
+    }
+
+    .launch-stack {
+      position: relative;
+      min-height: 900px;
+      width: 100vw;
+      overflow: visible;
+      margin-left: calc((100vw - var(--column)) / -2);
+    }
+
+    .launch-shuttle {
+      position: absolute;
+      top: -10px;
+      left: 32px;
+      z-index: 2;
+      width: min(500px, 100%);
+      filter: drop-shadow(0 18px 26px rgba(255, 255, 255, 0.14));
+    }
+
+    .launch-image {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
+      max-width: none;
+      transform: none;
+      object-fit: cover;
+      filter: contrast(1.05) brightness(0.98);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .gallery-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 4px;
+    }
+
+    .gallery-card img {
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .gallery-note {
+      grid-column: 1 / -1;
+      margin: 0px 0 0;
+      margin-top: 120px;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--soft);
+      text-align: center;
+    }
+
+    .gallery-layout {
+      grid-template-columns: minmax(0, 1.08fr) minmax(250px, 0.92fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .archive-button {
+      grid-column: 1 / -1;
+      justify-self: center;
+      min-width: 360px !important;
+      height: 84px !important;
+      padding: 0 32px !important;
+      margin-top: 96px !important;
+      font-size: 1.7rem !important;
+      line-height: 1 !important;
+      letter-spacing: 0.14em !important;
+    }
+
+    .gallery-layout .section-copy {
+      grid-column: 2;
+      width: 100%;
+      justify-self: stretch;
+      text-align: left;
+    }
+
+    .today-media {
+      display: grid;
+      gap: 16px;
+    }
+
+    .today-media img {
+      width: 100%;
+    }
+
+    .cta {
+      padding-bottom: 24px;
+    }
+
+    .cta-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(250px, 0.92fr);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      height: 32px;
+      margin-top: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.58rem;
+    }
+
+    .button:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    @media (max-width: 900px) {
+      :root {
+        --page-gutter: 8px;
+        --headline-bleed: 18px;
+      }
+
+      .page {
+        padding-top: 24px;
+      }
+
+      .chapter-index {
+        top: 22px;
+        width: calc(100% - 32px);
+        gap: 13px;
+        flex-wrap: wrap;
+      }
+
+      .section {
+        padding: 96px 0 48px;
+        margin-bottom: 88px;
+      }
+
+      .poster {
+        width: min(100%, 620px);
+      }
+
+      .hero-body,
+      .section-grid,
+      .launch-grid,
+      .gallery-layout,
+      .today-layout,
+      .future-layout,
+      .cta-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(220px, 0.88fr);
+        gap: 22px;
+      }
+
+      .headline {
+        gap: 10px;
+      }
+
+      .headline h1 {
+        font-size: 1.8rem;
+        letter-spacing: 0.2em;
+      }
+      .headline h2 {
+        font-size: 0.76rem;
+        letter-spacing: 0.18em;
+      }
+      .headline h3 {
+        font-size: 0.66rem;
+        letter-spacing: 0.14em;
+      }
+
+      .text-block p,
+      .support-copy,
+      .cta p {
+        font-size: 1rem;
+      }
+
+      .hero-art {
+        width: min(500px, 80vw);
+        transform: translateX(-50%);
+      }
+
+      .hero-body {
+        display: block;
+        min-height: clamp(220px, 42vw, 380px);
+      }
+
+      .hero {
+        padding-top: 82px;
+      }
+
+      .launch-stack {
+        min-height: 720px;
+        margin-left: -8px;
+      }
+
+      .launch-shuttle {
+        width: 190px;
+        left: 18px;
+      }
+
+      .launch-image {
+        width: 100vw;
+      }
+
+      .micro-title,
+      .gallery-note,
+      .button {
+        letter-spacing: 0.12em;
+      }
+
+      .micro-title {
+        font-size: 0.9rem;
+      }
+
+      .archive-button {
+        min-width: 280px !important;
+        height: 72px !important;
+        padding: 0 28px !important;
+        font-size: 1.35rem !important;
+        line-height: 1 !important;
+        letter-spacing: 0.14em !important;
+      }
+
+      .section-copy.copy-with-fact {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+      }
+
+      .fact-card {
+        grid-column: 1;
+        grid-row: auto;
+        width: min(100%, 380px);
+        margin-top: 4px;
+      }
+
+      .fact-card {
+        padding: 30px 28px 28px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      :root {
+        --page-gutter: 5px;
+        --headline-bleed: 12px;
+      }
+
+      .page {
+        width: var(--column);
+      }
+
+      .chapter-index {
+        top: 18px;
+        width: calc(100% - 18px);
+        gap: 9px 12px;
+      }
+
+      .chapter-dot {
+        font-size: 0.56rem;
+        letter-spacing: 0.08em;
+      }
+
+      .poster {
+        width: 100%;
+      }
+
+      .section {
+        min-height: auto;
+        padding: 82px 0 36px;
+        margin-bottom: 64px;
+      }
+
+      .hero-body,
+      .section-grid,
+      .launch-grid,
+      .gallery-layout,
+      .today-layout,
+      .future-layout,
+      .cta-layout {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .headline {
+        margin-bottom: 18px;
+      }
+
+      .headline h1,
+      .headline h2 {
+        font-size: 0.66rem;
+        letter-spacing: 0.14em;
+      }
+
+      .text-block p,
+      .support-copy,
+      .cta p {
+        font-size: 0.76rem;
+        max-width: none;
+      }
+
+      .micro-title {
+        font-size: 0.78rem;
+      }
+
+      .hero-art {
+        width: min(600px, 90vw);
+        transform: translateX(-50%);
+        opacity: 0.82;
+      }
+
+      .hero-body {
+        min-height: 210px;
+      }
+
+      .hero {
+        padding-top: 76px;
+      }
+
+      .launch-stack {
+        min-height: 480px;
+        margin-left: -5px;
+      }
+
+      .launch-shuttle {
+        width: 150px;
+        top: 6px;
+        left: 8px;
+      }
+
+      .launch-image {
+        width: 100vw;
+        transform: none;
+      }
+
+      .gallery-grid {
+        gap: 12px;
+      }
+
+      .gallery-note,
+      .button {
+        font-size: 0.46rem;
+      }
+
+      .archive-button {
+        min-width: min(100%, 280px) !important;
+        height: 72px !important;
+        padding: 0 22px !important;
+        font-size: 1.2rem !important;
+        line-height: 1 !important;
+        letter-spacing: 0.12em !important;
+      }
+
+      .section-copy.copy-with-fact {
+        gap: 18px;
+      }
+
+      .fact-card {
+        width: 100%;
+        padding: 26px 22px 24px;
+      }
+
+      .fact-card p {
+        max-width: none;
+        font-size: 0.72rem;
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition" id="page-transition" aria-hidden="true"></div>
+  <canvas class="starfield" aria-hidden="true"></canvas>
+  <nav class="chapter-index" aria-label="Chapter index">
+    <a class="chapter-dot" href="#hero">Hubble</a>
+    <a class="chapter-dot" href="#history">History</a>
+    <a class="chapter-dot" href="#launch">Launch</a>
+    <a class="chapter-dot" href="#gallery">Archive</a>
+    <a class="chapter-dot" href="#today">Today</a>
+    <a class="chapter-dot" href="#future">Future</a>
+  </nav>
+  <main class="page">
+    <div class="poster">
+      <section class="section hero" id="hero">
+        <div class="headline">
+          <h1>Hubble Space Telescope</h1>
+        </div>
+        <div class="hero-body">
+          <div class="hero-art-wrap">
+            <img class="hero-art" src="hubble/hubble_in_orbit.png" alt="Hubble telescope in orbit" />
+          </div>
+          <div></div>
+        </div>
+      </section>
+
+      <section class="section history" id="history">
+        <div class="headline">
+          <h3>The History</h3>
+        </div>
+        <div class="section-grid">
+          <div class="section-media history-visual">
+            <img class="reveal-soft" src="hubble/HubbleExplodedkkk.png" alt="Exploded view of the Hubble telescope" />
+          </div>
+          <div class="section-copy copy-with-fact">
+            <article class="text-block">
+              <h3 class="micro-title">The Birth of Hubble</h3>
+              <p>
+                Built to observe the universe beyond the blur of Earth's atmosphere, Hubble became one of the most
+                important scientific instruments ever launched. Its mission changed both astronomy and the public image
+                of space exploration.
+              </p>
+            </article>
+            <aside class="fact-card reveal">
+              <div class="fact-card-star"><span></span></div>
+              <p>
+                Hubble's first mirror was polished with extraordinary precision, but to the wrong curve by a tiny margin:
+                enough to blur its first images until astronauts corrected the flaw in orbit.
+              </p>
+            </aside>
+            <article class="text-block">
+              <h3 class="micro-title">How It Was Made</h3>
+              <p>
+                The telescope combines optics, instruments, communications systems and solar arrays into a compact
+                orbital observatory. Every section has a precise role, from collecting light to sending data back home.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section launch" id="launch">
+        <div class="headline">
+          <h2>Launch Into Space</h2>
+        </div>
+        <div class="launch-grid">
+          <div class="section-media launch-stack">
+            <img class="launch-shuttle reveal-soft" src="hubble/heic0618a.png" alt="Space shuttle approaching the telescope" />
+            <img class="launch-image reveal-soft" src="hubble/hubble_launch_0-jpg.png" alt="Hubble launch with smoke clouds" />
+          </div>
+          <div class="section-copy copy-with-fact">
+            <article class="text-block">
+              <h3 class="micro-title">Launch Into Space</h3>
+              <p class="support-copy">
+                Hubble launched on April 25, 1990 aboard Space Shuttle Discovery and began its long orbit around Earth,
+                opening a new way of seeing deep space.
+              </p>
+            </article>
+            <aside class="fact-card reveal">
+              <div class="fact-card-star"><span></span></div>
+              <p>
+                The telescope traveled to orbit inside the shuttle cargo bay. Its deployment turned a single launch
+                into one of the most iconic moments in modern spaceflight.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section gallery" id="gallery">
+        <div class="headline">
+          <h2>35 Years of Images</h2>
+        </div>
+        <div class="gallery-layout">
+          <div class="section-copy copy-with-fact">
+            <article class="text-block">
+              <h3 class="micro-title">Archive</h3>
+              <p>
+                Thirty five years of observations produced an immense visual archive, from glowing nebulae to distant
+                galaxies and detailed studies of our own cosmic neighborhood.
+              </p>
+            </article>
+          </div>
+          <a class="button archive-button" href="archivio/index.html">View Archive</a>
+          <p class="gallery-note">Thousands of observations and decades of discovery</p>
+        </div>
+      </section>
+
+      <section class="section today" id="today">
+        <div class="headline">
+          <h2>Hubble Today</h2>
+        </div>
+        <div class="today-layout">
+          <div class="today-media">
+            <img class="reveal-soft" src="hubble/hubble_in_orbit.png" alt="Hubble still in orbit" />
+            <img class="reveal-soft" src="hubble/webb-illustration-1041.png" alt="James Webb telescope illustration" />
+          </div>
+          <div class="section-copy copy-with-fact">
+            <article class="text-block">
+              <h3 class="micro-title">Still Working</h3>
+              <p>
+                Even today Hubble continues to send observations back to Earth, extending a scientific legacy that has
+                lasted for decades.
+              </p>
+            </article>
+            <aside class="fact-card reveal">
+              <div class="fact-card-star"><span></span></div>
+              <p>
+                Hubble does not circle the planet once a day: it completes an orbit roughly every 95 minutes, so it sees
+                sunrise and sunset many times in a single Earth day.
+              </p>
+            </aside>
+            <article class="text-block">
+              <h3 class="micro-title">James Webb</h3>
+              <p>
+                New telescopes continue the path Hubble helped define, but its images and discoveries remain central to
+                modern astronomy.
+              </p>
+            </article>
+            <aside class="fact-card reveal" style="grid-column: 1; margin-top: 24px; background: linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)) 40px 0 / calc(100% - 40px) 1px no-repeat, linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)) 0 58px / 1px calc(100% - 88px) no-repeat, linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)) 0 100% / calc(100% - 44px) 1px no-repeat, transparent;">
+              <div class="fact-card-star"><span></span></div>
+              <p>
+                Unlike Hubble, James Webb orbits the Sun 1.5 million km away. Its gold mirrors and infrared vision allow it to see through cosmic dust to witness the birth of the very first stars.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section future" id="future">
+        <div class="headline">
+          <h2>The Future of Hubble</h2>
+        </div>
+        <div class="future-layout">
+          <div class="future-media">
+            <img class="future-image reveal-soft" src="hubble/27923243952-f5dd4fa361-o.webp" alt="Astronaut servicing Hubble" />
+          </div>
+          <div class="section-copy copy-with-fact">
+            <article class="text-block">
+              <h3 class="micro-title">Legacy</h3>
+              <p>
+                One day Hubble will end its mission, but the data it produced and the way it reshaped our view of the
+                cosmos will continue to influence science far into the future.
+              </p>
+            </article>
+            <aside class="fact-card reveal">
+              <div class="fact-card-star"><span></span></div>
+              <p>
+                Few observatories were ever designed to be repaired in space. Hubble's service missions extended its life
+                so much that it became a bridge between generations of telescopes.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+  <script>
+    const pageTransition = document.getElementById("page-transition");
+
+    window.addEventListener("load", () => {
+      window.requestAnimationFrame(() => {
+        if (pageTransition) {
+          pageTransition.classList.add("is-hidden");
+        }
+      });
+    });
+
+    const canvas = document.querySelector(".starfield");
+    const context = canvas.getContext("2d");
+    const stars = [];
+    const layers = [
+      { count: 28, speed: 0.03, size: [0.6, 1.2], alpha: [0.12, 0.26] },
+      { count: 18, speed: 0.06, size: [0.9, 1.7], alpha: [0.18, 0.36] },
+      { count: 9, speed: 0.1, size: [1.4, 2.4], alpha: [0.24, 0.5] }
+    ];
+
+    function resizeCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(window.innerWidth * ratio);
+      canvas.height = Math.floor(window.innerHeight * ratio);
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      buildStars();
+      drawStars();
+    }
+
+    function randomBetween(min, max) {
+      return min + Math.random() * (max - min);
+    }
+
+    function buildStars() {
+      stars.length = 0;
+
+      layers.forEach((layer) => {
+        for (let index = 0; index < layer.count; index += 1) {
+          stars.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            radius: randomBetween(layer.size[0], layer.size[1]),
+            alpha: randomBetween(layer.alpha[0], layer.alpha[1]),
+            speed: layer.speed
+          });
+        }
+      });
+    }
+
+    function drawStars() {
+      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      stars.forEach((star) => {
+        const offsetY = (window.scrollY * star.speed) % (window.innerHeight + 120);
+        const y = (star.y + offsetY) % (window.innerHeight + 120) - 60;
+
+        context.beginPath();
+        context.arc(star.x, y, star.radius, 0, Math.PI * 2);
+        context.fillStyle = "rgba(255, 255, 255, " + star.alpha + ")";
+        context.shadowColor = "rgba(255, 255, 255, 0.2)";
+        context.shadowBlur = star.radius * 3;
+        context.fill();
+      });
+    }
+
+    let ticking = false;
+
+    function requestDraw() {
+      if (ticking) {
+        return;
+      }
+
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        drawStars();
+        ticking = false;
+      });
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("scroll", requestDraw, { passive: true });
+
+    resizeCanvas();
+
+    const revealElements = document.querySelectorAll(".reveal, .reveal-soft");
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          const delay = entry.target.classList.contains("fact-card") ? 2500 : 0;
+
+          window.setTimeout(() => {
+            entry.target.classList.add("is-visible");
+          }, delay);
+          revealObserver.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.18,
+        rootMargin: "0px 0px -8% 0px"
+      }
+    );
+
+    revealElements.forEach((element) => {
+      revealObserver.observe(element);
+    });
+
+    const chapterDots = document.querySelectorAll(".chapter-dot");
+    const chapterSections = document.querySelectorAll(".poster > .section[id]");
+    const chapterObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          const currentId = entry.target.id;
+          chapterDots.forEach((dot) => {
+            const isActive = dot.getAttribute("href") === "#" + currentId;
+            dot.classList.toggle("is-active", isActive);
+          });
+        });
+      },
+      {
+        threshold: 0.45
+      }
+    );
+
+    chapterSections.forEach((section) => {
+      chapterObserver.observe(section);
+    });
+  </script>
+</body>
+</html>
