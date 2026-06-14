@@ -140,7 +140,7 @@ items.forEach((item) => {
 ## Video del progetto
 Registrazione dello schermo del sito durante la navigazione del sito:
 <br>
-<video src="Registrazione_schermo.mp4" controls width="400" poster="https://raw.githubusercontent.com/laura-pantani/NASA-P1/main/doc/munari.jpg"></video>
+<video src="Registrazione_schermo.mp4" controls width="400" poster="https://raw.githubusercontent.com/laura-pantani/NASA-P1/main/doc/olafur_eliasson.jpg"></video> 
 
 *Nota: Se carichi il video trascinandolo nell'editor di GitHub, l'anteprima sarà generata automaticamente.*
 		
@@ -149,4 +149,4 @@ Registrazione dello schermo del sito durante la navigazione del sito:
 ## Target e contesto d’uso
 Il target del mio progetto sono i ragazzi e il possibile contesto d'uso é educativo e scolastico.
 
-[<img src="doc/munari.jpg" width="300" alt="Supplemento al dizionario italiano">]()
+[<img src="target.png" width="300" alt="Target audience">]()

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Hubble Interactive Archive</title>
@@ -204,6 +204,18 @@
     border-right: 1px solid rgba(255, 255, 255, 0.85);
     border-bottom: 1px solid rgba(255, 255, 255, 0.85);
     transform: translateX(-50%) rotate(45deg);
+  }
+
+  .story-link span {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Komunal Mono", monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .story-link:hover {
@@ -442,9 +454,11 @@
     35 Years of Photographs
     <span>by the Hubble Space Telescope</span>
   </h1>
-  <p class="intro-hint">Trascina per ruotare<br>Clicca una foto per ingrandire</p>
+  <p class="intro-hint">Drag to rotate<br>Click a photo to enlarge</p>
 </div>
-<a class="story-link" href="../storia.html" aria-label="Vai alla storia di Hubble"></a>
+<a class="story-link" href="../storia.html" aria-label="Vai alla storia di Hubble">
+  <span>Discover more</span>
+</a>
 <div class="page-transition" id="page-transition" aria-hidden="true"></div>
 <script src="database.js"></script>
 
@@ -453,19 +467,19 @@
 </script>
 <div class="frame">
   <div class="category-panel">
-    <button class="category-btn active" onclick="loadCategory(this, 'tutte')">Tutte</button>
-    <button class="category-btn" onclick="loadCategory(this, 'nebulose')">Nebulose</button>
-    <button class="category-btn" onclick="loadCategory(this, 'galassie')">Galassie</button>
-    <button class="category-btn" onclick="loadCategory(this, 'pianeti')">Pianeti</button>
-    <button class="category-btn" onclick="loadCategory(this, 'stelle')">Stelle</button>
-    <button class="category-btn" onclick="loadCategory(this, 'ammassi')">Ammassi</button>
+    <button class="category-btn active" onclick="loadCategory(this, 'tutte')">All</button>
+    <button class="category-btn" onclick="loadCategory(this, 'nebulose')">Nebulae</button>
+    <button class="category-btn" onclick="loadCategory(this, 'galassie')">Galaxies</button>
+    <button class="category-btn" onclick="loadCategory(this, 'pianeti')">Planets</button>
+    <button class="category-btn" onclick="loadCategory(this, 'stelle')">Stars</button>
+    <button class="category-btn" onclick="loadCategory(this, 'ammassi')">Clusters</button>
   </div>
   <div class="timeline-shell">
   </div>
 </div>
 
 
-<div id="loader">Caricamento spazio...</div>
+<div id="loader">Loading space...</div>
 
 <div id="modal">
   <div id="modal-content">
@@ -580,6 +594,14 @@ function loadCategory(btn, tag) {
   const allItems = HUBBLE_DB.timeline;
   const items = tag === 'tutte' ? allItems : allItems.filter(item => item.tags && item.tags.includes(tag));
 
+  // Gestione sovrapposizioni: contiamo quanti elementi ci sono per ogni coordinata
+  const coordCounts = {};
+  items.forEach(it => {
+    const key = `${it.ra}_${it.dec}`;
+    it._offsetIndex = coordCounts[key] || 0;
+    coordCounts[key] = it._offsetIndex + 1;
+  });
+
   items.forEach((item, i) => {
     textureLoader.load(item.url, (texture) => {
       if (loadId !== currentCategoryLoad) {
@@ -613,10 +635,20 @@ function loadCategory(btn, tag) {
       
       mesh.position.set(x, y, z);
       mesh.lookAt(0, 0, 0);
+
+      // Applichiamo lo spostamento se ci sono più foto nello stesso punto
+      const offsetStep = 14; // Distanza tra le foto
+      const idx = item._offsetIndex;
+      if (idx === 1) mesh.translateX(offsetStep);      // A destra
+      else if (idx === 2) mesh.translateX(-offsetStep); // A sinistra
+      else if (idx === 3) mesh.translateY(offsetStep);  // Sopra
+      else if (idx === 4) mesh.translateY(-offsetStep); // Sotto
+      else if (idx > 4) mesh.translateY(-offsetStep * (idx - 3)); // Altri casi sotto
+
       mesh.scale.setScalar(0.35);
       
       mesh.userData = {
-        title: `Anno ${item.year}: ${item.title}`,
+        title: `Year ${item.year}: ${item.title}`,
         desc: item.desc,
         url: item.url,
         tags: item.tags,
@@ -638,7 +670,7 @@ function openModal(data) {
   isModalOpen = true;
   document.getElementById('modal-img').src = data.url;
   document.getElementById('modal-title').innerText = data.title;
-  const tagsText = data.tags ? `Tag: ${data.tags.join(', ')}` : '';
+  const tagsText = data.tags ? `Tags: ${data.tags.join(', ')}` : '';
   document.getElementById('modal-desc').innerText = data.desc.substring(0, 400) + "..." + (tagsText ? `\n\n${tagsText}` : '');
   modal.classList.add('open');
 }
