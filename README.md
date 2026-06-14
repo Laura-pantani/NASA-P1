@@ -6,7 +6,6 @@
 
 
 
-https://github.com/user-attachments/assets/22bbc707-6b87-4bff-8b6d-4c04725351fc
 
 
 SUPSI 2026  
@@ -153,7 +152,15 @@ Registrazione dello schermo del sito durante la navigazione del sito:
 <br>
 <video src="Registrazione_schermo.mp4" controls width="400" poster="https://raw.githubusercontent.com/laura-pantani/NASA-P1/main/doc/munari.jpg"></video>
 
-https://github.com/user-attachments/assets/76df5771-9e51-460a-803d-70c267e0c6e9
+
+
+https://github.com/user-attachments/assets/8ac069c6-3cea-48f4-9268-618dff11dee0
+
+
+
+https://github.com/user-attachments/assets/ff6dccf4-032c-4a9c-be4b-18ece2afd8c1
+
+
 
 		
 
