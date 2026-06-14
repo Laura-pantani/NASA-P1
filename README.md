@@ -1,3 +1,13 @@
+
+
+
+
+
+
+
+
+
+
 SUPSI 2026  
 Corso d’interaction design, CV429.01  
 Docenti: A. Gysin, G. Profeta  
@@ -142,7 +152,16 @@ Registrazione dello schermo del sito durante la navigazione del sito:
 <br>
 <video src="Registrazione_schermo.mp4" controls width="400" poster="https://raw.githubusercontent.com/laura-pantani/NASA-P1/main/doc/olafur_eliasson.jpg"></video> 
 
-*Nota: Se carichi il video trascinandolo nell'editor di GitHub, l'anteprima sarà generata automaticamente.*
+
+
+https://github.com/user-attachments/assets/8ac069c6-3cea-48f4-9268-618dff11dee0
+
+
+
+https://github.com/user-attachments/assets/ff6dccf4-032c-4a9c-be4b-18ece2afd8c1
+
+
+
 		
 
 
