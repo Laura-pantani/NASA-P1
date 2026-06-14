@@ -135,14 +135,14 @@ items.forEach((item) => {
 ```
 		
 		
-[<img src="doc/cards.gif" width="500" alt="Magic trick">]
+
 		
 ## Video del progetto
 Registrazione dello schermo del sito durante la navigazione del sito:
+
+<video src="Registrazione_schermo.mp4" controls width="400" poster="doc/munari.jpg"></video>
 		
-<video src="Registrazione_schermo.mp4" controls width="700"></video>
-		
-[Guarda la registrazione](Registrazione_schermo.mp4)
+
 
 ## Target e contesto d’uso
 Il target del mio progetto sono i ragazzi e il possibile contesto d'uso é educativo e scolastico.
