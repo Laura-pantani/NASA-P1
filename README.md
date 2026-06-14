@@ -5,6 +5,10 @@
 
 
 
+
+https://github.com/user-attachments/assets/22bbc707-6b87-4bff-8b6d-4c04725351fc
+
+
 SUPSI 2026  
 Corso d’interaction design, CV429.01  
 Docenti: A. Gysin, G. Profeta  
