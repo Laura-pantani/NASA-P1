@@ -1,6 +1,5 @@
 
 
-https://github.com/user-attachments/assets/76df5771-9e51-460a-803d-70c267e0c6e9
 
 
 
@@ -150,7 +149,8 @@ Registrazione dello schermo del sito durante la navigazione del sito:
 <br>
 <video src="Registrazione_schermo.mp4" controls width="400" poster="https://raw.githubusercontent.com/laura-pantani/NASA-P1/main/doc/munari.jpg"></video>
 
-*Nota: Se carichi il video trascinandolo nell'editor di GitHub, l'anteprima sarà generata automaticamente.*
+https://github.com/user-attachments/assets/76df5771-9e51-460a-803d-70c267e0c6e9
+
 		
 
 
