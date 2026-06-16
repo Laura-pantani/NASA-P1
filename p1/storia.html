@@ -209,6 +209,21 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
     }
+
+    #launch .headline {
+      position: relative;
+      z-index: 3; /* Assicura che il titolo sia sopra l'immagine con z-index: 2 */
+    }
+
+    #launch .section-copy {
+      position: relative;
+      z-index: 3; /* Assicura che il testo sia sopra l'immagine con z-index: 2 */
+    }
+
+    #launch h2, #launch .micro-title, #launch p {
+      text-shadow: 2px 2px 10px #000, 1px 1px 2px #000;
+    }
+
     .headline h3 {
       margin: 0;
       font-size: 2rem;
@@ -568,6 +583,42 @@
       background: rgba(255, 255, 255, 0.06);
     }
 
+    @media (min-width: 901px) {
+      .launch-grid {
+        position: relative;
+      }
+
+      .launch-stack {
+        z-index: 0;
+      }
+
+      .launch-copy-panel {
+        position: relative;
+        z-index: 3;
+        align-self: start;
+        justify-self: end;
+        width: min(420px, 100%);
+        margin-top: clamp(24px, 8vw, 120px);
+        padding: 30px 28px 26px;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.58) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.52);
+        backdrop-filter: blur(4px);
+      }
+
+      .launch-copy-panel .text-block p,
+      .launch-copy-panel .support-copy,
+      .launch-copy-panel .fact-card p {
+        max-width: none;
+      }
+
+      .launch-copy-panel .fact-card {
+        width: 100%;
+        margin-top: 18px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+    }
+
     @media (max-width: 900px) {
       :root {
         --page-gutter: 8px;
@@ -853,7 +904,7 @@
           <div class="section-media history-visual">
             <img class="reveal-soft" src="hubble/HubbleExplodedkkk.png" alt="Exploded view of the Hubble telescope" />
           </div>
-          <div class="section-copy copy-with-fact">
+          <div class="section-copy copy-with-fact launch-copy-panel">
             <article class="text-block">
               <h3 class="micro-title">The Birth of Hubble</h3>
               <p>
